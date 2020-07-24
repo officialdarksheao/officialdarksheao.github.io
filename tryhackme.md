@@ -7,5 +7,5 @@ Check them out: [TryHackMe](https://tryhackme.com/)
 As I go through things, I will try to post writeups here.
 
 Rooms:
-* [overpass](/writeups/overpass.md)
-* [blog](/writeups/blog.md)
+* [overpass](/tryhackme/overpass.md)
+* [blog](/tryhackme/blog.md)
