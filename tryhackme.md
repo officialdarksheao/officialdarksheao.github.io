@@ -1,3 +1,5 @@
+[Back](/)
+
 # TryHackMe Writeups
 
 TryHackMe is a security training platform that makes learning pentesting and security feel more like a game!
