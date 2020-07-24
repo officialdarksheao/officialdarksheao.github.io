@@ -1,4 +1,4 @@
-[Back](/tryhackme.md)
+[Back](/tryhackme)
 
 # Overpass
 https://tryhackme.com/room/overpass

@@ -1,4 +1,4 @@
-[Back](/tryhackme.md)
+[Back](/tryhackme)
 
 # Blog
 Writeup still in progress
