@@ -62,7 +62,7 @@ For hard drive, I like a nice round 64g.
 
 ![2 to the power of 6](/images/guides/manjaro_on_hyperv/14.jpg)
 
-I already have the < INSERT MANJARO EDITION I GOT WORKING HERE > iso ready to go, so I select that for the installation media. This will insert the iso (virtual dvd) into the VM's virtual dvd drive.
+I already have the manjaro-xfce-20.0.3-200606-linux56 iso ready to go, so I select that for the installation media. This will insert the iso (virtual dvd) into the VM's virtual dvd drive.
 
 ![Less is more](/images/guides/manjaro_on_hyperv/15.jpg)
 
@@ -112,4 +112,102 @@ systemctl restart lightdm
 
 Now we can actually see the desktop! Let's Go ahead and install manjaro.
 
-( TO BE CONTINUED )
+![I can see I can see](/images/guides/manjaro_on_hyperv/21.jpg)
+
+This desktop we are seeing is the "Live" booted Manjaro. Unless we install, we don't actually get to keep anything we do here. In my case I had a pop-up where "Launch Installer" is an option, if that pop up didn't load for whatever reason, the CD shaped icon that says "Install Manjaro" also launches the installer.
+
+For the Hard Drive Install location, we want to make sure that the virtual hard drive is selected, the one that we set up in an earlier step. We want to use the entire disk, and just for giggles I'm going to enable a swap file, without hibernation.
+
+![sweet sweet memory](/images/guides/manjaro_on_hyperv/22.jpg)
+
+For the Users section you will create your username and password, and set up the administrator (root) password.
+
+You can the option here to install an office suite if you desire, in my case I'm skipping that.
+
+Finally we get to the summary page. Clicking "Install" gives us one final "point of no return" warning.
+
+![ready set go](/images/guides/manjaro_on_hyperv/23.jpg)
+
+There will be various messages as the progress bar fills. Eventually you will be done!
+
+![installed](/images/guides/manjaro_on_hyperv/24.jpg)
+
+You can either check the "restart now" box, or manually restart. When the various console messages finally disappear, go into the "file" menu, settings, to the virtual dvd drive, and select "none". This takes our install "disc" out of the drive.
+
+![no disc for you](/images/guides/manjaro_on_hyperv/25.jpg)
+
+We can then wait. If you are paying attention, you will see the HyperV Logo, then a black screen, then the HyperV Logo again. It won't really do much past here, hung up like it was before when we had to load the display driver manually.
+
+Push Control + Alt + F2 again and you will see a log in screen, this time with your machine name! Enter your user and password to log in.
+
+![MOAR CONSOLE](/images/guides/manjaro_on_hyperv/26.jpg)
+
+We still need a display driver, but the one we were loading for the installer runs pretty badly. So instead, we are going to set up a better one. See the [Arch Wiki](https://wiki.archlinux.org/index.php/Hyper-V#Enhanced_Session_Mode) on more details.
+
+We will need to run the following code:
+
+```
+sudo pacman –Sy
+sudo pacman –S git
+cd Downloads
+git clone https://github.com/Microsoft/linux-vm-tools.git ./linux-vm-tools
+cd linux-vm-tools/arch
+./makepkg.sh
+sudo ./install.sh
+```
+
+> Explaination:
+> `sudo pacman –Sy` -- temporarily as the root user, update the pacman repository
+> `sudo pacman –S git` -- temporarily as the root user, search for and install the git source control system [git-scm](https://git-scm.com/)
+> `cd Downloads` -- move to a directory where we can download our source code to build our driver
+> `git clone https://github.com/Microsoft/linux-vm-tools.git ./linux-vm-tools` -- using git, pull down the source code and store in the linux-vm-tools directory
+> `cd linux-vm-tools/arch` -- move to the "arch" build directory
+> `./makepkg.sh` -- run the script to handle the setup, this will download and build many packages and will take a while to complete, and may ask for your password as it builds things.
+> `sudo ./install-config.sh` -- temporarily as the root user, install our new tools.
+
+After the install is finished, there is a message about `.xinirc`
+This is a configuration file for "x" or the graphical desktop environment.
+We need to remove one section from it to be able to run in Enhanced Session mode.
+
+![installed tools](/images/guides/manjaro_on_hyperv/27.jpg)
+
+Open this file
+```
+cd ~
+vi .xinirc
+```
+
+And find the line:
+```
+local dbus_args=(--sh-syntax --exit-with-session)
+```
+### Mini Vim Tutorial
+In VIM, if you enter `/dbus` it will jump you to the first time that word is in the file, which is the line we want.
+Press "i" to go into "insert" mode, arrow keys to move and then delete the offending flag.
+When done editing, push escape, then enter ":wq" to write and quit the editor.
+
+Edit it to remove the `--exit-with-session` flag.
+
+We can now shut down our VM.
+```
+shutdown now
+```
+
+We need to run a single powershell command to toggle the Enhanced Sesssion Mode. (if you named your vm something other than "Manjaro", replace that in the command). You will need to do this with a powershell running as administrator.
+```
+Set-VM -VMName Manjaro -EnhancedSessionTransportType HvSocket
+```
+
+Now we can boot up our Manjaro VM through Hyper-V, getting an option to choose resolution: (Note: it took a while staring at a black screen before this popped up)
+
+![resolution selector](/images/guides/manjaro_on_hyperv/28.jpg)
+
+And then a plain looking session/username/password login screen. Enter your Manjaro details but leave the Session as "Xorg".
+
+![login](/images/guides/manjaro_on_hyperv/29.jpg)
+
+We should be all set up and good to go with our new shiny enhanced Manjaro VM!
+
+> This is written almost entirely based on the blog entry by gpburdell on the manjaro forums. I just wanted some more screenshots and adjusted wording.
+> I claim no ownership of the information
+> Original post: [Manjaro Forums](https://forum.manjaro.org/t/installing-manjaro-in-hyper-v-with-enhanced-session-support/79394)
