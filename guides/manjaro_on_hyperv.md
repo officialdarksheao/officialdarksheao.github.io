@@ -1,5 +1,10 @@
 # Setting up Manjaro Linux using Hyper-V
 
+Make sure to download an iso of Manjaro.
+[Manjaro Linux](https://manjaro.org/)
+
+## Hyper-V Setup
+
 Ensure you have hyper-v and the windows hypervisor platform enabled. If you are running windows 10 home edition, you will need to upgrade to pro for this to be available.
 
 > Done with help from forum article [Installing Manjaro in Hyper-V with Enhanced Session Support](https://forum.manjaro.org/t/installing-manjaro-in-hyper-v-with-enhanced-session-support/79394)
@@ -13,6 +18,8 @@ Ensure the "Hyper-v" and the "Windows Hypervisor Platform" are enabled. If this 
 ![Enable Hyper-v](/images/guides/manjaro_on_hyperv/2.jpg)
 
 You will now be able to load the Hyper-V Manager.
+
+## Prerequisite Settings
 
 ![Load Hyper-V Manager](/images/guides/manjaro_on_hyperv/3.jpg)
 
@@ -35,6 +42,8 @@ Create a new virtual switch, of the type "external". Then click "Create Virtual 
 In the newly create switch's settings, let's name it "Bridge". (This can be anything, just a way to identify the connection type). Make sure the connection interface is a valid one, and that it allows the host system to share the interface. Click "Apply". It will warn you that it may disrupt connections, proceed.
 
 ![Making the Bridge](/images/guides/manjaro_on_hyperv/8.jpg)
+
+## Creating our VM
 
 Now that we have the settings ready and a virtual network switch created, Let's create the VM. Select "New" then "Virtual Machine".
 
@@ -76,6 +85,8 @@ The Manjaro ISO will only run if you disable the VM's "Secure Boot" Option. So, 
 ![Unsecure it](/images/guides/manjaro_on_hyperv/17.jpg)
 
 Now we can actually start our machine! Double clicking and the selecting "start" will get this booted up.
+
+## Installing Manjaro
 
 The First screen we will see will be the bootloader. You can either push enter, or arrow around to change the timezone if you feel like it.
 
@@ -207,6 +218,8 @@ And then a plain looking session/username/password login screen. Enter your Manj
 ![login](/images/guides/manjaro_on_hyperv/29.jpg)
 
 We should be all set up and good to go with our new shiny enhanced Manjaro VM!
+
+## Credits
 
 > This is written almost entirely based on the blog entry by gpburdell on the manjaro forums. I just wanted some more screenshots and adjusted wording.
 > I claim no ownership of the information
