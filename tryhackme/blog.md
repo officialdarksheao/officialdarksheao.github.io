@@ -12,6 +12,10 @@ Just in case we don't have a VM, let's go an get one.
 Since I've never messed with Arch Linux, I'm using Manjaro this time.
 [Manjaro Linux](https://manjaro.org/)
 
+## Alternatives
+If you are running a windows computer that supports hyper-v, running in hypervisor can be significantly more responsive than using virtualbox.
+I will post a guide on setting this up [Here](/guides/manjaro_on_hyperv)
+
 ## Download VirtualBox
 Virtualbox is a decent option, so I'm going with that for this exercise.
 [Oracle VirtualBox](https://www.virtualbox.org/)
