@@ -241,7 +241,7 @@ We might as well pull up the target site and see what's up.
 Once we have access to a machine, we can upload some helpful files that can enumerate the victim. Peas and LinEnum are two of my favorite for this.
 
 ```
-cd ~/sources
+mkdir ~/scripts && cd ~/scripts
 git clone https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git
 git clone https://github.com/rebootuser/LinEnum.git
 ```
