@@ -147,12 +147,14 @@ sudo bash -s stable
 bash < ./rvm-install
 ```
 
+sudo bash will turn thr text red, indicating you are running as root now.
+
 Then for your user (and any other users you want this to be used by), run:
 ```
 usermod -a -G rvm <your username here>
 ```
 
-Exit your terminal and re-open it, run:
+Exit your terminal completely, () and re-open it, and as a non-root user run:
 ```
 type rvm | head -n1
 ```
