@@ -21,7 +21,7 @@ Pick where you will save the source code of your project. For my example, I am n
 ![Project name](/images/tutorials/csharp_particles/creating_new_project_naming.jpg)
 
 Framework wise I am going with .net core 3.1 for overall compatibility.
-![Framework selection](/images/tutorials/chsarp_particles/creating_new_project_framework.jpg)
+![Framework selection](/images/tutorials/csharp_particles/creating_new_project_framework.jpg)
 
 ## Planning
 A rough generalization of a particle system can be broken down into these parts:
@@ -51,10 +51,10 @@ Each classes added in this folder will have .Classes added to it's namespace.
 
 > Namespaces are a way to organize code. To access a class in a namespace different than the one it is defined in, add a `using {namespace};` to the beginning of the class you are needing to access it from.
 
-![adding a folder to project root](/images/turorials/csharp_particles/adding_new_folder_to_project_root.jpg)
+![adding a folder to project root](/images/tutorials/csharp_particles/adding_new_folder_to_project_root.jpg)
 
 Right click the newly created folder and choose Add New -> Class, creating a Particle and an Emitter class.
 
-![added classes](/images/turorials/csharp_particles/adding_classes.jpg)
+![added classes](/images/tutorials/csharp_particles/adding_classes.jpg)
 
 From research and experience, I know I need a handful of the components in the Drawing class. Add a `using System.Drawing;` to the top of our two new classes.
