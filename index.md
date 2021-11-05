@@ -14,4 +14,4 @@ This is a static site for hosting writeup documents as I progress through variou
 * [Setting up Manjaro on Hyper-V](/guides/manjaro_on_hyperv)
 
 ## Turorials
-* [Setting up display forwarding in WSL2](/tutorials\wsl2_and_vsxrv.md)
+* [Setting up display forwarding in WSL2](/tutorials\wsl2_and_vsxrv)
