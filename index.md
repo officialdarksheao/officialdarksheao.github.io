@@ -6,9 +6,10 @@ This is a static site for hosting writeup documents as I progress through variou
 > Professionally a software engineer and hacker by hobby, both in the digital way and in the tinkering together of things in the real.
 
 ## Writeups:
-[TryHackMe](/tryhackme.md)
+[TryHackMe](/tryhackme)
 * [Room: Overpass](/tryhackme/overpass)
 * [Room: Blog](/tryhackme/blog)
+* [Linux PrivEsc](/tryhackme/linuxprivesc)
 
 ## Guides:
 * [Setting up Manjaro on Hyper-V](/guides/manjaro_on_hyperv)
